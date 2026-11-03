@@ -1,0 +1,66 @@
+{
+  "name": "@smaltdb/external",
+  "version": "0.9.0",
+  "description": "External data sources for smaltdb: HTTP(S), S3, Azure Blob Storage, registered files and local paths",
+  "keywords": [
+    "smaltdb",
+    "s3",
+    "azure",
+    "http",
+    "sql"
+  ],
+  "author": "stenhoor",
+  "license": "MIT",
+  "homepage": "https://github.com/stenhoor/smaltdb-external#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stenhoor/smaltdb-external.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stenhoor/smaltdb-external/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "deps": "node scripts/fetch-packed.mjs",
+    "build": "node scripts/build.mjs",
+    "typecheck": "node scripts/fetch-packed.mjs --check && tsc -p tsconfig.json",
+    "test": "node scripts/fetch-packed.mjs --check && vitest run",
+    "test:browser": "node test/browser/run.mjs",
+    "check": "npm run typecheck && npm test",
+    "prepublishOnly": "npm run check && npm run build"
+  },
+  "peerDependencies": {
+    "smaltdb": ">=0.9.0 <0.10.0"
+  },
+  "peerDependenciesMeta": {
+    "smaltdb": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "esbuild": "^0.28.2",
+    "typescript": "5.9",
+    "vitest": "^5.0.5"
+  }
+}

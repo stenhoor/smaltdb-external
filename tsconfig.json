@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "WebWorker"],
+    "strict": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "smaltdb": ["./node_modules/smaltdb/src/client/index.ts"],
+      "smaltdb/engine": ["./node_modules/smaltdb/src/engine/index.ts"],
+      "smaltdb/worker-runtime": ["./node_modules/smaltdb/src/engine/worker-runtime.ts"],
+      "smaltdb-src/*": ["./node_modules/smaltdb/src/*"]
+    }
+  },
+  "include": ["src", "test"]
+}
