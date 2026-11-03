@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # smaltdb and sibling plugins are not on npm yet: build the commits pinned in packed.json and install them.
+      - uses: actions/cache@v4
+        with:
+          path: .cache/packed/*.tgz
+          key: packed-${{ hashFiles('packed.json') }}
+      - run: node scripts/fetch-packed.mjs
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
