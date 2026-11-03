@@ -3,8 +3,9 @@
 // packed.json pins each package to a commit of its repository:
 //   { "smaltdb": { "repo": "stenhoor/smaltdb", "ref": "<sha>" },
 //     "@smaltdb/io": { "repo": "stenhoor/smaltdb-io", "ref": "<sha>" } }
-// An entry may add "dir" (the package is a folder of a monorepo, built from the repository root), or be
-// { "path": "." }: this checkout is that package, used to build the others but not installed into itself.
+// An entry may add "dir" (the package is a folder of a monorepo, built from the repository root) and "keep" (paths of
+// the checkout to keep next to the tarball, in .cache/packed/<name>-<ref>-files, e.g. ["docs"]), or be { "path": "." }:
+// this checkout is that package, used to build the others but not installed into itself.
 //
 // For each pin the script checks out the commit, builds it, runs `npm pack`, and finally installs every tarball with
 // `npm install --no-save`, so nothing reaches package.json or the lockfile. Tarballs are cached in .cache/packed by
@@ -17,7 +18,7 @@
 // This file is identical in smaltdb, smaltdb-io, smaltdb-external and smaltdb-parquet. It is deleted when 0.9.0 is
 // published and the pins become ordinary ^0.9.0 dependencies.
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const root = process.cwd();
@@ -61,7 +62,9 @@ function pack(name, pin) {
   }
   if (!pin.repo || !/^[0-9a-f]{40}$/.test(pin.ref ?? '')) fail(`${name}: a pin needs "repo" and a full 40-character commit "ref"`);
   const tgz = join(cache, `${slug}-${pin.ref}${pin.dir ? `-${pin.dir.replace(/\//g, '-')}` : ''}.tgz`);
-  if (existsSync(tgz)) return tgz;
+  const kept = join(cache, `${slug}-${pin.ref}-files`);
+  const keep = pin.keep ?? [];
+  if (existsSync(tgz) && keep.every((p) => existsSync(join(kept, p)))) return tgz;
   const src = join(cache, 'src', `${pin.repo.replace('/', '-')}-${pin.ref}`);
   if (!existsSync(join(src, 'package.json'))) {
     rmSync(src, { recursive: true, force: true });
@@ -70,6 +73,8 @@ function pack(name, pin) {
     run('git', ['fetch', '-q', '--depth', '1', `https://github.com/${pin.repo}.git`, pin.ref], src);
     run('git', ['checkout', '-q', 'FETCH_HEAD'], src);
   }
+  for (const p of keep) cpSync(join(src, p), join(kept, p), { recursive: true });
+  if (existsSync(tgz)) return tgz;
   const dir = pin.dir ? join(src, pin.dir) : src;
   build(name, src, dir);
   const packed = npmPack(dir);

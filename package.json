@@ -45,6 +45,7 @@
     "build": "node scripts/build.mjs",
     "typecheck": "node scripts/fetch-packed.mjs --check && tsc -p tsconfig.json",
     "test": "node scripts/fetch-packed.mjs --check && vitest run",
+    "test:browser": "node test/browser/run.mjs",
     "check": "npm run typecheck && npm test",
     "prepublishOnly": "npm run check && npm run build"
   },

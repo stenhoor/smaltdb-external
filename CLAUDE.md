@@ -13,6 +13,7 @@ starting point, and its working rules match smaltdb's `CLAUDE.md`.
 | `npm ci && npm run deps` | Installs dependencies, then the pinned builds in `packed.json` (see below) | First, and again after every `npm ci` or `npm install` |
 | `npm run check` | `npm run typecheck` then `npm test` (vitest): what CI runs | Before every commit |
 | `npm run build` | `dist/`: the bundled plugin (`index.js`) and its helpers (`client.js`) and its type declarations | Packaging checks |
+| `npm run test:browser` | Request signing on the browser's WebCrypto (Playwright). CI runs it on Chromium, Firefox and WebKit; smaltdb's browser test covers the sources through the engine worker | Changes to signing |
 
 ## Before the first publish
 
