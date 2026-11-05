@@ -12,9 +12,11 @@ export default defineConfig({
       { find: /^smaltdb$/, replacement: core('client/index.ts') },
       { find: /^smaltdb\/engine$/, replacement: core('engine/index.ts') },
       { find: /^smaltdb\/worker-runtime$/, replacement: core('engine/worker-runtime.ts') },
+      { find: /^smaltdb\/language$/, replacement: core('engine/language-support.ts') },
       { find: /^smaltdb-src\/(.*)\.js$/, replacement: core('$1.ts') },
     ],
   },
-  server: { deps: { inline: [/node_modules\/smaltdb\//] } },
-  test: { include: ['test/**/*.test.ts'] },
+  // smaltql (SQL, ADR 0015) is inlined too, so its smaltdb imports resolve to the same engine source.
+  server: { deps: { inline: [/node_modules\/smaltdb\//, /node_modules\/smaltql\//] } },
+  test: { include: ['test/**/*.test.ts'], setupFiles: ['test/setup-sql.ts'] },
 });

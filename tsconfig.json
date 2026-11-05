@@ -16,6 +16,7 @@
       "smaltdb": ["./node_modules/smaltdb/src/client/index.ts"],
       "smaltdb/engine": ["./node_modules/smaltdb/src/engine/index.ts"],
       "smaltdb/worker-runtime": ["./node_modules/smaltdb/src/engine/worker-runtime.ts"],
+      "smaltdb/language": ["./node_modules/smaltdb/src/engine/language-support.ts"],
       "smaltdb-src/*": ["./node_modules/smaltdb/src/*"]
     }
   },
