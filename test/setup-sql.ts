@@ -2,6 +2,6 @@
 // still register the SQL it carries: register smaltql's after each test file's imports, so smaltql's is the one used.
 import { beforeAll } from 'vitest';
 import { registerLanguage } from 'smaltdb/language';
-import { sqlLanguage } from 'smaltql';
+import { sqlLanguage } from '@smaltworks/smaltql';
 
 beforeAll(() => registerLanguage(sqlLanguage));
