@@ -16,7 +16,7 @@ export default defineConfig({
       { find: /^smaltdb-src\/(.*)\.js$/, replacement: core('$1.ts') },
     ],
   },
-  // smaltql (SQL, ADR 0015) is inlined too, so its smaltdb imports resolve to the same engine source.
-  server: { deps: { inline: [/node_modules\/smaltdb\//, /node_modules\/smaltql\//] } },
+  // smaltql (@smaltworks/smaltql: SQL, ADR 0015) is inlined too, so its smaltdb imports resolve to the same engine source.
+  server: { deps: { inline: [/node_modules\/smaltdb\//, /node_modules\/@smaltworks\/smaltql\//] } },
   test: { include: ['test/**/*.test.ts'], setupFiles: ['test/setup-sql.ts'] },
 });

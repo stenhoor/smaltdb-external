@@ -1,7 +1,7 @@
 // The tests run SQL from smaltql (test/setup-sql.ts), not SQL smaltdb may still carry.
 import { describe, expect, it, vi } from 'vitest';
 import { Database } from 'smaltdb/engine';
-import { sqlLanguage } from 'smaltql';
+import { sqlLanguage } from '@smaltworks/smaltql';
 
 describe('SQL', () => {
   it('comes from smaltql', () => {

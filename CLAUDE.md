@@ -29,7 +29,7 @@ types; `npm run build` checks its declarations against smaltdb's published types
 
 ## Rules for this plugin
 
-- SQL is its own package, `smaltql` (smaltdb ADR 0015), pinned in `packed.json` beside smaltdb. The tests' databases
+- SQL is its own package, smaltql (`@smaltworks/smaltql`, smaltdb ADR 0015), pinned in `packed.json` beside smaltdb. The tests' databases
   read SQL from it (`test/setup-sql.ts` registers it; `test/sql-language.test.ts` checks it is the one used), and a worker
   entry registers it with `defineWorker({ languages: [sqlLanguage], plugins })`.
 - The plugin imports only types from `smaltdb/engine`; nothing from smaltdb is bundled or imported at run time.
