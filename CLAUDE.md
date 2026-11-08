@@ -57,6 +57,10 @@ types; `npm run build` checks its declarations against smaltdb's published types
 - Mark unfinished work clearly, and open a PR only when CI passes.
 - Read review comments on your PR and answer them with commits that say what they address.
 - When a PR depends on another repo's PR, add a line such as `Depends on: stenhoor/smalt-brand#2`.
+- **Ask before adding outside code.** Ask the owner, and wait for a yes, before adding a package (a dependency of any
+  kind, or a pin in `packed.json`), copying or bundling in someone else's code, or loading code from another site at run
+  time (a CDN such as jsDelivr). Say what it is, its licence and size, what it's for, and why our own code can't do it.
+  Outside code that a feature needs goes in a plugin, so it is named and optional, never in core.
 
 ## Issues
 
