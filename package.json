@@ -43,7 +43,7 @@
   "scripts": {
     "deps": "node scripts/fetch-packed.mjs",
     "build": "node scripts/build.mjs",
-    "typecheck": "node scripts/fetch-packed.mjs --check && tsc -p tsconfig.json",
+    "typecheck": "node scripts/fetch-packed.mjs --check && node node_modules/typescript7/bin/tsc -p tsconfig.json",
     "test": "node scripts/fetch-packed.mjs --check && vitest run",
     "test:browser": "node test/browser/run.mjs",
     "check": "npm run typecheck && npm test",
@@ -60,7 +60,8 @@
   "devDependencies": {
     "@types/node": "^22.20.5",
     "esbuild": "^0.28.2",
-    "typescript": "5.9",
+    "typescript": "~6.0.3",
+    "typescript7": "npm:typescript@~7.0.2",
     "vitest": "^5.0.5"
   }
 }
