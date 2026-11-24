@@ -82,14 +82,20 @@ function pack(name, pin) {
   return tgz;
 }
 
-// A monorepo or smaltdb builds from its root. A plugin repository is built against the smaltdb tarball.
+// A monorepo or smaltdb builds from its root. Any other package is built against the smaltdb tarball, and against the
+// tarball of each other pin it names as a peer dependency that its own install didn't provide (smaltai's smaltts, for
+// its store). Such a pin must come earlier in packed.json.
 function build(name, repoRoot, dir) {
   // This checkout is already installed; `npm ci` here would also remove what this script installs.
   if (repoRoot !== root) run('npm', ['ci', '--no-audit', '--no-fund'], repoRoot);
   if (repoRoot === dir && name !== 'smaltdb') {
     const core = tarballs.get('smaltdb');
     if (!core) fail(`${name}: building a plugin needs a "smaltdb" pin in packed.json`);
-    run('npm', ['install', '--no-save', '--no-audit', '--no-fund', core], repoRoot);
+    const peers = Object.keys(JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8')).peerDependencies ?? {});
+    const needed = peers.filter((peer) => peer !== 'smaltdb' && peer !== name && peer in pins && !existsSync(join(repoRoot, 'node_modules', peer, 'package.json')));
+    const later = needed.filter((peer) => !tarballs.has(peer));
+    if (later.length > 0) fail(`${name} is built against ${later.join(' and ')}: list ${later.length > 1 ? 'them' : 'it'} before ${name} in packed.json`);
+    run('npm', ['install', '--no-save', '--no-audit', '--no-fund', core, ...needed.map((peer) => tarballs.get(peer))], repoRoot);
   }
   run('npm', ['run', 'build'], repoRoot);
 }
